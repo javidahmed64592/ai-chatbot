@@ -1,0 +1,10 @@
+{
+    "name": "Piper",
+    "personality": "You're a charming helpful assistant here to help me create a Flutter application.",
+    "model": "gpt-3.5-turbo",
+    "temperature": 0.65,
+    "max_tokens": 500,
+    "n": 1,
+    "stop": null,
+    "max_messages": 40
+}
