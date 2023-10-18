@@ -42,17 +42,7 @@ class MessageInputState extends State<MessageInput> {
       child: Row(
         children: [
           Expanded(
-            child: TextField(
-              controller: _messageController,
-              decoration: const InputDecoration(
-                filled: true,
-                fillColor: Color.fromARGB(255, 30, 33, 36),
-                hintText: 'Type a message...',
-                hintStyle: TextStyle(color: Colors.white),
-                border: OutlineInputBorder(),
-              ),
-              style: const TextStyle(color: Colors.white),
-            ),
+            child: MessageInputField(messageController: _messageController),
           ),
           const SizedBox(width: 16.0),
           IconButton(
@@ -60,6 +50,27 @@ class MessageInputState extends State<MessageInput> {
             onPressed: sendMessage,
           ),
         ],
+      ),
+    );
+  }
+}
+
+class MessageInputField extends StatelessWidget {
+  const MessageInputField({super.key, required this.messageController});
+
+  final TextEditingController messageController;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: messageController,
+      style: const TextStyle(color: Colors.white),
+      decoration: const InputDecoration(
+        filled: true,
+        fillColor: Color.fromARGB(255, 30, 33, 36),
+        hintText: 'Type a message...',
+        hintStyle: TextStyle(color: Colors.white),
+        border: OutlineInputBorder(),
       ),
     );
   }

@@ -32,14 +32,7 @@ class MessageContainer extends StatelessWidget {
     }
 
     MessageHeader messageHeader = MessageHeader(icon: icon, text: name);
-    Text messageBody = Text(
-      content,
-      textAlign: TextAlign.left,
-      style: const TextStyle(
-        color: Colors.white,
-        fontSize: 16.0,
-      ),
-    );
+    MessageBody messageBody = MessageBody(text: content);
 
     return Align(
       child: Container(
@@ -55,6 +48,33 @@ class MessageContainer extends StatelessWidget {
   }
 }
 
+class MessageText extends StatelessWidget {
+  const MessageText(
+      {super.key,
+      required this.text,
+      required this.size,
+      required this.fontWeight,
+      required this.colour});
+
+  final String text;
+  final double size;
+  final FontWeight fontWeight;
+  final Color colour;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      textAlign: TextAlign.left,
+      style: TextStyle(
+        fontSize: size,
+        fontWeight: fontWeight,
+        color: colour,
+      ),
+    );
+  }
+}
+
 class MessageHeader extends StatelessWidget {
   const MessageHeader({super.key, required this.icon, required this.text});
 
@@ -63,21 +83,36 @@ class MessageHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final MessageText header = MessageText(
+      text: '- $text',
+      size: 24,
+      fontWeight: FontWeight.bold,
+      colour: Colors.white,
+    );
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Icon(icon, color: Colors.white),
         const SizedBox(width: 8),
-        Text(
-          '- $text',
-          textAlign: TextAlign.left,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 24.0,
-            fontWeight: FontWeight.bold,
-          ),
-        )
+        header
       ],
+    );
+  }
+}
+
+class MessageBody extends StatelessWidget {
+  const MessageBody({super.key, required this.text});
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return MessageText(
+      text: text,
+      size: 16,
+      fontWeight: FontWeight.normal,
+      colour: Colors.white,
     );
   }
 }
