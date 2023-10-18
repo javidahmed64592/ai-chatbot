@@ -38,16 +38,20 @@ class MessageInputState extends State<MessageInput> {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16.0),
-      color: Colors.grey[200],
+      color: const Color.fromARGB(255, 40, 43, 48),
       child: Row(
         children: [
           Expanded(
             child: TextField(
               controller: _messageController,
               decoration: const InputDecoration(
+                filled: true,
+                fillColor: Color.fromARGB(255, 30, 33, 36),
                 hintText: 'Type a message...',
+                hintStyle: TextStyle(color: Colors.white),
                 border: OutlineInputBorder(),
               ),
+              style: const TextStyle(color: Colors.white),
             ),
           ),
           const SizedBox(width: 16.0),
