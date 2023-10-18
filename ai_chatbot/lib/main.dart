@@ -31,8 +31,10 @@ class MainAppState extends State<MainApp> {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
+    return MaterialApp(
+      theme: ThemeData(
+          scaffoldBackgroundColor: const Color.fromARGB(255, 66, 69, 73)),
+      home: const Scaffold(
         appBar: TopBar(
           title: "AI Chatbot",
         ),
