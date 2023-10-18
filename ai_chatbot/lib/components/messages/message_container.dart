@@ -66,10 +66,10 @@ class MessageHeader extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        Icon(icon),
+        Icon(icon, color: Colors.white),
         const SizedBox(width: 8),
         Text(
-          text,
+          '- $text',
           textAlign: TextAlign.left,
           style: const TextStyle(
             color: Colors.white,
