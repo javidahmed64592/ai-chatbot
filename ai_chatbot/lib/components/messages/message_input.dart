@@ -56,7 +56,7 @@ class MessageInputState extends State<MessageInput> {
           ),
           const SizedBox(width: 16.0),
           IconButton(
-            icon: const Icon(Icons.send),
+            icon: const Icon(Icons.send, color: Colors.white),
             onPressed: sendMessage,
           ),
         ],
