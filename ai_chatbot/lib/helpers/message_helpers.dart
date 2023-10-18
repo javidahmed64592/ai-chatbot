@@ -5,31 +5,19 @@ import 'dart:convert';
 class MessageHelpers {
   static void sendMessage(MessageProvider messageProvider, String message) {
     messageProvider.addMessage({'role': 'user', 'content': message});
-    String reply = "";
+    MessageHelpers.postMessage(message)
+        .then((_) => messageProvider.getMessages());
+  }
 
-    // Send message via post request to get response
-    Future<void> postData() async {
-      final url = Uri.parse('http://127.0.0.1:5000/api/messages');
-      final body = jsonEncode({'message': message});
-      final headers = {'Content-Type': 'application/json'};
+  static Future<void> postMessage(String message) async {
+    final url = Uri.parse('http://127.0.0.1:5000/api/messages');
+    final body = jsonEncode({'message': message});
+    final headers = {'Content-Type': 'application/json'};
 
-      try {
-        final response = await http.post(url, headers: headers, body: body);
-
-        if (response.statusCode == 200) {
-          reply = jsonDecode(response.body)["reply"];
-        } else {
-          reply = 'Error - ${response.statusCode}';
-        }
-      } catch (e) {
-        print('Error: $e');
-      } finally {
-        if (reply != "") {
-          messageProvider.addMessage({'role': 'assistant', 'content': reply});
-        }
-      }
+    try {
+      await http.post(url, headers: headers, body: body);
+    } catch (e) {
+      print('Error: $e');
     }
-
-    postData();
   }
 }
