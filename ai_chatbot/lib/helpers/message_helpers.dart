@@ -15,7 +15,9 @@ class MessageHelpers {
     final headers = {'Content-Type': 'application/json'};
 
     try {
-      await http.post(url, headers: headers, body: body);
+      final response = jsonDecode(
+          (await http.post(url, headers: headers, body: body)).body)["reply"];
+      print(response);
     } catch (e) {
       print('Error: $e');
     }
