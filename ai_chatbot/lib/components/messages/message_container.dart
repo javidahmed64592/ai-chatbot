@@ -84,8 +84,8 @@ class MessageHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final MessageText header = MessageText(
-      text: '- $text',
-      size: 24,
+      text: text,
+      size: 26,
       fontWeight: FontWeight.bold,
       colour: Colors.white,
     );
@@ -93,7 +93,11 @@ class MessageHeader extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        Icon(icon, color: Colors.white),
+        CircleAvatar(
+          backgroundColor: const Color.fromARGB(255, 30, 33, 36),
+          radius: 16,
+          child: Icon(icon, color: Colors.white, size: 20),
+        ),
         const SizedBox(width: 8),
         header
       ],
