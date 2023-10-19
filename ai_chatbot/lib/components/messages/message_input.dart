@@ -64,6 +64,9 @@ class MessageInputField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       controller: messageController,
+      autofocus: true,
+      minLines: 1,
+      maxLines: 5,
       style: const TextStyle(color: Colors.white),
       decoration: const InputDecoration(
         filled: true,
