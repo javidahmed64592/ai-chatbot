@@ -1,16 +1,18 @@
 import os
 
 import openai
-from helpers.general_helpers import read_txt_file, write_to_txt_file
 from openai.error import RateLimitError
+
+from helpers.general_helpers import read_txt_file, write_to_txt_file
 
 
 class Chatbot:
     def __init__(self, personality_config, chat_history_directory):
         self.name = personality_config["name"]
         self.personality = personality_config["personality"]
+        self.rules = personality_config["rules"]
 
-        self.api_key = os.getenv(f"API_KEY_{self.name.upper()}")
+        self.api_key = os.getenv("API_KEY")
         openai.api_key = self.api_key
 
         self.model = personality_config["model"]
@@ -22,12 +24,20 @@ class Chatbot:
 
         self.chat_history_directory = chat_history_directory
         self._messages = []
-        self._msg_system(f"Your name is {self.name}. {self.personality}")
+        self._msg_system(
+            f"Your name is {self.name}. {self.personality}. You follow these rules: \n{Chatbot.create_numbered_list(self.rules)}"
+        )
         self.num_messages_at_start = 1
+
+    @staticmethod
+    def create_numbered_list(lst):
+        numbered_list = [f"{i}) {item}" for i, item in enumerate(lst, start=1)]
+        numbered_string = "\n".join(numbered_list)
+        return numbered_string
 
     def _add_msg(self, role, msg):
         if len(self._messages) >= self.max_messages:
-            del self._messages[1:3]
+            del self._messages[self.num_messages_at_start : self.num_messages_at_start + 2]
 
         self._messages.append({"role": role, "content": msg})
 
@@ -106,9 +116,7 @@ class Chatbot:
         num_messages = len(self._messages) - self.num_messages_at_start
 
         if save_chat and num_messages > 4:
-            self._msg_user(
-                f"Can you summarise the last {num_messages} messages? Keep your response concise."
-            )
+            self._msg_user(f"Can you summarise the last {num_messages} messages? Keep your response concise.")
             self.save_chat()
 
         return response
