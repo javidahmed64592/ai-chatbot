@@ -4,6 +4,8 @@ import 'package:http/http.dart' as http;
 
 class MessageProvider extends ChangeNotifier {
   List<Map<String, dynamic>> _messages = [];
+  List<Map<String, dynamic>> get messages => _messages;
+  ScrollController scrollController = ScrollController();
 
   Future<void> getMessages() async {
     final response =
@@ -17,8 +19,6 @@ class MessageProvider extends ChangeNotifier {
       throw Exception('Failed to fetch messages');
     }
   }
-
-  List<Map<String, dynamic>> get messages => _messages;
 
   void addMessage(Map<String, dynamic> message) {
     _messages.add(message);

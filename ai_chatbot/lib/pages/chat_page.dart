@@ -9,15 +9,19 @@ class ChatPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<MessageProvider>(builder: (context, messageProvider, _) {
-      return Column(
-        children: [
-          Expanded(
-            child: MessageList(messages: messageProvider.messages),
-          ),
-          MessageInput(messageProvider: messageProvider),
-        ],
-      );
-    });
+    return Consumer<MessageProvider>(
+      builder: (context, messageProvider, _) {
+        return Column(
+          children: [
+            Expanded(
+                child: MessageList(
+              messages: messageProvider.messages,
+              scrollController: messageProvider.scrollController,
+            )),
+            MessageInput(messageProvider: messageProvider),
+          ],
+        );
+      },
+    );
   }
 }
