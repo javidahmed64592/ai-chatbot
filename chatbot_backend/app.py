@@ -31,14 +31,25 @@ def end_chat():
         return jsonify(success=True)
 
 
-@app.route("/api/messages", methods=["GET", "POST"])
+@app.route("/api/messages", methods=["GET"])
 def messages():
     if request.method == "GET":
         return jsonify({"messages": chatbot._messages})
-    elif request.method == "POST":
+
+
+@app.route("/api/chat/send", methods=["POST"])
+def send_message():
+    if request.method == "POST":
         data = json.loads(request.data)
         message = data["message"]
-        reply = chatbot.chat(message)
+        reply = chatbot.send_message(message)
+        return jsonify({"reply": reply})
+
+
+@app.route("/api/chat/reply", methods=["GET"])
+def get_reply():
+    if request.method == "GET":
+        reply = chatbot.get_reply()
         return jsonify({"reply": reply})
 
 

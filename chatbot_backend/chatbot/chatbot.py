@@ -115,9 +115,12 @@ class Chatbot:
             self.summarise_chat(num_messages)
             write_to_txt_file(self._chat_history_filename, str(self._messages))
 
-    def chat(self, msg):
+    def send_message(self, msg):
         if len(msg) == 0:
             return "Can't send empty message!"
 
         self._msg_user(msg)
+        return "Message sent!"
+
+    def get_reply(self):
         return self._generate_response()
