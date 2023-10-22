@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'components/topbar.dart';
 import 'providers/message_provider.dart';
+import 'components/topbar.dart';
 import 'pages/chat_page.dart';
 
 void main() {
@@ -20,13 +20,32 @@ class MainApp extends StatefulWidget {
   MainAppState createState() => MainAppState();
 }
 
-class MainAppState extends State<MainApp> {
+class MainAppState extends State<MainApp> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     final messageProvider =
         Provider.of<MessageProvider>(context, listen: false);
+    messageProvider.loadMessages();
     messageProvider.getMessages();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    final messageProvider =
+        Provider.of<MessageProvider>(context, listen: false);
+    if (state == AppLifecycleState.paused) {
+      messageProvider.endChat();
+    } else if (state == AppLifecycleState.resumed) {
+      messageProvider.getMessages();
+    }
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
 
   @override
