@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:ai_chatbot/providers/message_provider.dart';
-import 'package:ai_chatbot/helpers/message_helpers.dart';
 
 class MessageInput extends StatefulWidget {
   const MessageInput({super.key, required this.messageProvider});
@@ -9,7 +8,7 @@ class MessageInput extends StatefulWidget {
 
   void _sendMessage(String message) {
     if (message != "") {
-      MessageHelpers.sendMessage(messageProvider, message);
+      messageProvider.sendMessage(message);
     }
   }
 
