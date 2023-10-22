@@ -10,7 +10,7 @@ class MessageHelpers {
   }
 
   static Future<void> postMessage(String message) async {
-    final url = Uri.parse('http://127.0.0.1:5000/api/messages');
+    final url = Uri.parse('http://10.0.2.2:5000/api/messages');
     final body = jsonEncode({'message': message});
     final headers = {'Content-Type': 'application/json'};
 
