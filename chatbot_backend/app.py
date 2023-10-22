@@ -54,12 +54,12 @@ def get_reply():
 
 
 if __name__ == "__main__":
-    system_msg("Loading environment variables...")
+    print(system_msg("Loading environment variables..."))
     load_dotenv()
 
     try:
-        system_msg("Running app...")
+        print(system_msg("Running app..."))
         app.run(host="0.0.0.0")
-        system_msg("App running!...")
+        print(system_msg("App running!..."))
     except (KeyboardInterrupt, SystemExit):
-        system_msg("Shutting down program...")
+        print(system_msg("Shutting down program..."))
