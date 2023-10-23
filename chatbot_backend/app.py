@@ -53,6 +53,15 @@ def get_reply():
         return jsonify({"reply": reply})
 
 
+@app.route("/api/chatbot/personality", methods=["GET", "POST"])
+def personality():
+    if request.method == "GET":
+        return jsonify({"personality_config": chatbot.personality_config})
+    elif request.method == "POST":
+        data = json.loads(request.data)
+        chatbot.personality_config = data
+
+
 if __name__ == "__main__":
     print(system_msg("Loading environment variables..."))
     load_dotenv()
@@ -60,6 +69,5 @@ if __name__ == "__main__":
     try:
         print(system_msg("Running app..."))
         app.run(host="0.0.0.0")
-        print(system_msg("App running!..."))
     except (KeyboardInterrupt, SystemExit):
         print(system_msg("Shutting down program..."))

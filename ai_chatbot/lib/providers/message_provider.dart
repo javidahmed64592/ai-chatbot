@@ -6,6 +6,17 @@ class MessageProvider extends ChangeNotifier {
   List<Map<String, dynamic>> _messages = [];
   List<Map<String, dynamic>> get messages => _messages;
   ScrollController scrollController = ScrollController();
+  Map<String, dynamic> personalityConfig = {
+    "name": "AI",
+    "personality": "Personality",
+    "rules": ["Rule"],
+    "model": "model",
+    "temperature": 0.5,
+    "max_tokens": 200,
+    "n": 1,
+    "stop": null,
+    "max_messages": 40
+  };
 
   Future<void> loadMessages() async {
     final url = Uri.parse('http://10.0.2.2:5000/api/chat/load');
@@ -14,7 +25,7 @@ class MessageProvider extends ChangeNotifier {
     if (response.statusCode == 200) {
       print('Chat loaded successfully!');
     } else {
-      throw Exception('Failed to fetch messages');
+      throw Exception('Failed to load messages');
     }
   }
 
@@ -27,7 +38,21 @@ class MessageProvider extends ChangeNotifier {
       _messages = List<Map<String, dynamic>>.from(data["messages"]);
       notifyListeners();
     } else {
-      throw Exception('Failed to fetch messages');
+      throw Exception('Failed to get messages');
+    }
+  }
+
+  Future<void> getPersonalityConfig() async {
+    final url = Uri.parse('http://10.0.2.2:5000/api/chatbot/personality');
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      personalityConfig = data["personality_config"];
+      notifyListeners();
+      print('Personality configuration loaded successfully!');
+    } else {
+      throw Exception('Failed to fetch chatbot personality');
     }
   }
 
@@ -38,7 +63,7 @@ class MessageProvider extends ChangeNotifier {
     if (response.statusCode == 200) {
       print('Chat ended successfully!');
     } else {
-      throw Exception('Failed to fetch messages');
+      throw Exception('Failed to end chat successfully');
     }
   }
 
