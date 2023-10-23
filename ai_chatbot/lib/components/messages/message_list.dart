@@ -2,11 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:ai_chatbot/components/messages/message_container.dart';
 
 class MessageList extends StatelessWidget {
-  const MessageList(
-      {super.key, required this.messages, required this.scrollController});
+  const MessageList({
+    super.key,
+    required this.messages,
+    required this.scrollController,
+    required this.chatbotName,
+  });
 
   final List<Map<String, dynamic>> messages;
   final ScrollController scrollController;
+  final String chatbotName;
 
   void scrollToBottom(ScrollController scrollController) {
     scrollController.animateTo(
@@ -28,6 +33,7 @@ class MessageList extends StatelessWidget {
         return MessageContainer(
           role: messages[index]['role']!,
           content: messages[index]['content']!,
+          chatbotName: chatbotName,
         );
       },
     );

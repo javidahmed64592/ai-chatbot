@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 
 class MessageContainer extends StatelessWidget {
-  const MessageContainer(
-      {super.key, required this.role, required this.content});
+  const MessageContainer({
+    super.key,
+    required this.role,
+    required this.content,
+    required this.chatbotName,
+  });
 
   final String role;
   final String content;
+  final String chatbotName;
   final Color color = const Color.fromARGB(255, 66, 69, 73);
 
   @override
@@ -19,7 +24,7 @@ class MessageContainer extends StatelessWidget {
         icon = Icons.face;
         break;
       case 'assistant':
-        name = "AI";
+        name = chatbotName;
         icon = Icons.computer;
         break;
       case 'system':

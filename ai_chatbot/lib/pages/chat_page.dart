@@ -14,10 +14,12 @@ class ChatPage extends StatelessWidget {
         return Column(
           children: [
             Expanded(
-                child: MessageList(
-              messages: messageProvider.messages,
-              scrollController: messageProvider.scrollController,
-            )),
+              child: MessageList(
+                messages: messageProvider.messages,
+                scrollController: messageProvider.scrollController,
+                chatbotName: messageProvider.personalityConfig["name"],
+              ),
+            ),
             MessageInput(messageProvider: messageProvider),
           ],
         );
