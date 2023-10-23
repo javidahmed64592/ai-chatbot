@@ -27,6 +27,7 @@ class MainAppState extends State<MainApp> with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
     final messageProvider =
         Provider.of<MessageProvider>(context, listen: false);
+    messageProvider.getPersonalityConfig();
     messageProvider.loadMessages();
     messageProvider.getMessages();
   }
