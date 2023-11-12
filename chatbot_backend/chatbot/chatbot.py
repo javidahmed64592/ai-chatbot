@@ -98,15 +98,18 @@ class Chatbot:
         finally:
             return reply
 
+    def reset_chat(self):
+        self._messages = []
+        self._msg_system(self._create_context_msg())
+
     def load_chat(self):
         reply = "Starting new chat..."
-        self._messages = []
 
         if os.path.exists(self._chat_history_filename):
             self._chat_summaries = eval(read_txt_file(self._chat_history_filename))
             reply = "Chat summaries loaded successfully."
 
-        self._msg_system(self._create_context_msg())
+        self.reset_chat()
         return reply
 
     def summarise_chat(self):
@@ -121,8 +124,7 @@ class Chatbot:
         if num_messages > 4:
             self.summarise_chat()
             write_to_txt_file(self._chat_history_filename, str(self._chat_summaries))
-            self._messages = []
-            self._msg_system(self._create_context_msg())
+            self.reset_chat()
             reply = "Last conversation successfully summarised. Ending chat..."
 
         return reply
