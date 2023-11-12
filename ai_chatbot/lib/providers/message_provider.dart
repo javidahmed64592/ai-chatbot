@@ -8,7 +8,6 @@ class MessageProvider extends ChangeNotifier {
   ScrollController scrollController = ScrollController();
   Map<String, dynamic> personalityConfig = {
     "name": "AI",
-    "personality": "Personality",
     "rules": ["Rule"],
     "model": "model",
     "temperature": 0.5,
@@ -18,8 +17,12 @@ class MessageProvider extends ChangeNotifier {
     "max_messages": 40
   };
 
+  String host = '10.0.2.2';
+  String port = '5000';
+  String get apiUrl => 'http://$host:$port';
+
   Future<void> loadMessages() async {
-    final url = Uri.parse('http://10.0.2.2:5000/api/chat/load');
+    final url = Uri.parse('$apiUrl/api/chat/load');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -30,7 +33,7 @@ class MessageProvider extends ChangeNotifier {
   }
 
   Future<void> getMessages() async {
-    final url = Uri.parse('http://10.0.2.2:5000/api/messages');
+    final url = Uri.parse('$apiUrl/api/messages');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -43,7 +46,7 @@ class MessageProvider extends ChangeNotifier {
   }
 
   Future<void> getPersonalityConfig() async {
-    final url = Uri.parse('http://10.0.2.2:5000/api/chatbot/personality');
+    final url = Uri.parse('$apiUrl/api/chatbot/personality');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -57,7 +60,7 @@ class MessageProvider extends ChangeNotifier {
   }
 
   Future<void> endChat() async {
-    final url = Uri.parse('http://10.0.2.2:5000/api/chat/end');
+    final url = Uri.parse('$apiUrl/api/chat/end');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -73,7 +76,7 @@ class MessageProvider extends ChangeNotifier {
   }
 
   Future<void> postMessage(String message) async {
-    final url = Uri.parse('http://10.0.2.2:5000/api/chat/send');
+    final url = Uri.parse('$apiUrl/api/chat/send');
     final body = jsonEncode({'message': message});
     final headers = {'Content-Type': 'application/json'};
 
@@ -87,7 +90,7 @@ class MessageProvider extends ChangeNotifier {
   }
 
   Future<void> getReply() async {
-    final url = Uri.parse('http://10.0.2.2:5000/api/chat/reply');
+    final url = Uri.parse('$apiUrl/api/chat/reply');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
