@@ -13,7 +13,6 @@ class MessageProvider extends ChangeNotifier {
     "temperature": 0.5,
     "max_tokens": 200,
     "n": 1,
-    "stop": null,
     "max_messages": 40
   };
 

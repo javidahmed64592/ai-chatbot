@@ -41,7 +41,6 @@ class Chatbot:
         self.temperature = self.personality_config["temperature"]
         self.max_tokens = self.personality_config["max_tokens"]
         self.n = self.personality_config["n"]
-        self.stop = self.personality_config["stop"]
         self.max_messages = self.personality_config["max_messages"]
 
     @staticmethod
@@ -83,7 +82,6 @@ class Chatbot:
                 temperature=self.temperature,
                 max_tokens=self.max_tokens,
                 n=self.n,
-                stop=self.stop,
             )
 
             reply = response.choices[0]["message"]["content"]
