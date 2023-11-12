@@ -18,7 +18,7 @@ class Chatbot:
         self._chat_history_directory = chat_history_directory
         self._chat_history_filename = self._chat_history_directory / f"{self.name}.txt"
         self._messages = []
-        self._num_messages_at_start = 1
+        self._chat_summaries = []
 
     @property
     def personality_config(self):
@@ -35,7 +35,6 @@ class Chatbot:
 
     def set_personality(self):
         self.name = self.personality_config["name"]
-        self.personality = self.personality_config["personality"]
         self.rules = self.personality_config["rules"]
 
         self.model = self.personality_config["model"]
@@ -53,7 +52,7 @@ class Chatbot:
 
     def _add_msg(self, role, msg):
         if len(self._messages) >= self.max_messages:
-            del self._messages[self._num_messages_at_start : self._num_messages_at_start + 2]
+            del self._messages[1:3]
 
         self._messages.append({"role": role, "content": msg})
 
@@ -66,7 +65,17 @@ class Chatbot:
     def _msg_user(self, msg):
         self._add_msg("user", msg)
 
-    def _generate_response(self):
+    def _create_context_msg(self):
+        context_msg = (
+            f"Your name is {self.name}. You follow these rules: \n\n{Chatbot.create_numbered_list(self.rules)}"
+        )
+
+        if self._chat_summaries:
+            context_msg += f"\n\nIn previous conversations, we have discussed: \n\n{Chatbot.create_numbered_list(self._chat_summaries)}"
+
+        return context_msg
+
+    def generate_response(self):
         try:
             response = openai.ChatCompletion.create(
                 model=self.model,
@@ -90,30 +99,33 @@ class Chatbot:
             return reply
 
     def load_chat(self):
-        try:
-            if not os.path.exists(self._chat_history_filename):
-                raise FileNotFoundError("Chat history does not exist.")
+        reply = "Starting new chat..."
+        self._messages = []
 
-            self._messages = eval(read_txt_file(self._chat_history_filename))
-        except (FileNotFoundError, SyntaxError):
-            self._msg_system(
-                f"Your name is {self.name}. {self.personality}. You follow these rules: \n{Chatbot.create_numbered_list(self.rules)}"
-            )
+        if os.path.exists(self._chat_history_filename):
+            self._chat_summaries = eval(read_txt_file(self._chat_history_filename))
+            reply = "Chat summaries loaded successfully."
 
-        self._num_messages_at_start = len(self._messages)
+        self._msg_system(self._create_context_msg())
+        return reply
 
-    def summarise_chat(self, num_messages):
-        self._msg_user(f"Can you summarise the last {num_messages} messages? Keep your response concise.")
-        summary = self._generate_response()
-        del self._messages[self._num_messages_at_start :]
-        self._msg_system(f"Summary of last conversation: {summary}")
+    def summarise_chat(self):
+        self._msg_user(f"Can you summarise all these messages? Ignore the first message. Keep your response concise.")
+        summary = self.generate_response()
+        self._chat_summaries.append(summary)
 
     def end_chat(self):
-        num_messages = len(self._messages) - self._num_messages_at_start
+        reply = "Ending chat without summarising..."
+        num_messages = len(self._messages)
 
-        if num_messages > 0:
-            self.summarise_chat(num_messages)
-            write_to_txt_file(self._chat_history_filename, str(self._messages))
+        if num_messages > 4:
+            self.summarise_chat()
+            write_to_txt_file(self._chat_history_filename, str(self._chat_summaries))
+            self._messages = []
+            self._msg_system(self._create_context_msg())
+            reply = "Last conversation successfully summarised. Ending chat..."
+
+        return reply
 
     def send_message(self, msg):
         if len(msg) == 0:
@@ -121,6 +133,3 @@ class Chatbot:
 
         self._msg_user(msg)
         return "Message sent!"
-
-    def get_reply(self):
-        return self._generate_response()
