@@ -20,14 +20,16 @@ chatbot = Chatbot(
 @app.route("/api/chat/load", methods=["GET"])
 def load_chat():
     if request.method == "GET":
-        chatbot.load_chat()
+        reply = chatbot.load_chat()
+        print(reply)
         return jsonify(success=True)
 
 
 @app.route("/api/chat/end", methods=["GET"])
 def end_chat():
     if request.method == "GET":
-        chatbot.end_chat()
+        reply = chatbot.end_chat()
+        print(reply)
         return jsonify(success=True)
 
 
@@ -43,13 +45,15 @@ def send_message():
         data = json.loads(request.data)
         message = data["message"]
         reply = chatbot.send_message(message)
+        print(reply)
         return jsonify({"reply": reply})
 
 
 @app.route("/api/chat/reply", methods=["GET"])
 def get_reply():
     if request.method == "GET":
-        reply = chatbot.get_reply()
+        reply = chatbot.generate_response()
+        print(reply)
         return jsonify({"reply": reply})
 
 
